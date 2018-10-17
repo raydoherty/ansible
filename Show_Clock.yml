@@ -7,7 +7,7 @@
     tasks:
 
      - name: IOS 
-        ios_command:
-            - show clock
+        command:
+           - show clock
        register: clock
      - debug: msg="{{ clock.stdout }}"

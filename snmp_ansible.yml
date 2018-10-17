@@ -1,7 +1,8 @@
 ---
   - name: snmp configuration
     hosts: 10.193.195.14
-    connection: local
+    connection: network_cli
+    ansible_network_os: nxos
     gather_facts: no
 
     tasks:

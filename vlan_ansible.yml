@@ -2,6 +2,7 @@
 
 - name: vlan testing
   hosts: 10.193.195.14
+  connection: local
   gather_facts: no
 
   tasks:

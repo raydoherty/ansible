@@ -2,6 +2,7 @@
 
 - name: vlan testing
   hosts: 10.193.195.14
+  gather_facts: no
 
   tasks:
     - name: config VLANs names for a few VLANs

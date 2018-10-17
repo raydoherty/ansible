@@ -1,7 +1,7 @@
 ---
 
 - name: vlan testing
-  hosts: Nexus 5548
+  hosts: All
 
   tasks:
     - name: config VLANs names for a few VLANs

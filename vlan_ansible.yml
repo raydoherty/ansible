@@ -1,7 +1,7 @@
 ---
 
 - name: vlan testing
-  hosts: All
+  hosts: N5KTACCTest1
 
   tasks:
     - name: config VLANs names for a few VLANs

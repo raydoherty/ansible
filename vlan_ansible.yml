@@ -1,6 +1,7 @@
 ---
 
 - name: vlan testing
+  hosts: '5672'
   connection: local
   gather_facts: no
 

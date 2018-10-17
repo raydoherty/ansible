@@ -3,7 +3,6 @@
 - name: vlan testing
   hosts: 10.193.195.14
   connection: local
-  transport: nxapi
   gather_facts: no
 
   tasks:
@@ -12,6 +11,8 @@
       with_items:
         - { vid: 10, name: web }
         - { vid: 20, name: app }
-
+      povider:"{{ nxapi }}"
+      
     - name: ensure VLAN 30 exists with the name WEB and is in the shutdown state
       nxos_vlan: vlan_id=30 host={{ inventory_hostname }} admin_state=down name=WEB
+      povider:"{{ nxapi }}"

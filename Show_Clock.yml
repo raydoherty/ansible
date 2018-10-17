@@ -6,7 +6,7 @@
 
     tasks:
 
- - name: IOS | Show clock
+ - name: IOS 
     ios_command:
       commands:
         - show clock

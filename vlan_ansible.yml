@@ -1,7 +1,7 @@
 ---
 
 - name: vlan testing
-  hosts: 10.193.195.16
+  hosts: 5672
   connection: local
   gather_facts: no
 

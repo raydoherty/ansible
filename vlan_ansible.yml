@@ -2,7 +2,7 @@
 
 - name: vlan testing
   hosts: 10.193.195.14
-  connection: local
+  connection: network_cli
   gather_facts: no
 
   tasks:

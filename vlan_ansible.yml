@@ -4,6 +4,9 @@
   hosts: 10.193.195.14
   connection: local
   gather_facts: no
+  vars:
+    nxapi:
+      transport: nxapi
 
   tasks:
     - name: config VLANs names for a few VLANs

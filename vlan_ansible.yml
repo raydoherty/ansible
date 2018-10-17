@@ -15,4 +15,4 @@
       
     - name: ensure VLAN 30 exists with the name WEB and is in the shutdown state
       nxos_vlan: vlan_id=30 host={{ inventory_hostname }} admin_state=down name=WEB
-      povider:"{{ nxapi }}"
+      povider: "{{ nxapi }}"

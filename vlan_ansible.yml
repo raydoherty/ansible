@@ -2,7 +2,8 @@
 
 - name: vlan testing
   hosts: 10.193.195.14
-  connection: network_cli
+  connection: local
+  transport: nxapi
   gather_facts: no
 
   tasks:

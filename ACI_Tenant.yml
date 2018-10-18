@@ -1,0 +1,12 @@
+---
+- name: Create (or delete) a tenant in ACI
+  hosts:  ACI
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Create (or delete) tenant
+      aci_tenant:
+        tenant: Ansible_Tenant
+        description: 'created with ansible
+        state: present

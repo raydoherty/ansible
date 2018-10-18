@@ -1,15 +1,16 @@
----
+--
 
 - name: Vlan Interface configuration
-  hosts: '5672'
+  hosts: 5672
   connection: local
   gather_facts: no
 
   tasks:
-    - name: Create VLAN interface
-     		nxos_interface:
-       			interface_type: svi
-       			interface: vlan 10
-       			admin_state: up
-       			mode: layer3
-       			state: present
+
+ - name: Create VLAN interface
+   nxos_interface:
+       interface_type: svi
+       interface: vlan 10
+       admin_state: up
+       mode: layer3
+       state: present

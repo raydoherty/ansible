@@ -9,5 +9,3 @@
          ios_command:
            commands:
               - show clock
-           register: clock
-       - debug: msg="{{ clock.stdout }}"

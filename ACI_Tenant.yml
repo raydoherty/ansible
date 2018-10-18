@@ -8,5 +8,5 @@
     - name: Create (or delete) tenant
       aci_tenant:
         tenant: Ansible_Tenant
-        description: 'created with ansible
+        description: 'created with ansible'
         state: present

@@ -8,4 +8,4 @@
        - name: IOS | Show clock
          ios_command:
            commands:
-              - show clock
+            - show clock

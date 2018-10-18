@@ -1,6 +1,6 @@
 ---
   - name: clock configuration
-    hosts: 5548
+    hosts: '5548'
     connection: network_cli
     gather_facts: no
 

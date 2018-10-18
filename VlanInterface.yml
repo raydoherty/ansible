@@ -1,7 +1,7 @@
 --
 
 - name: Vlan Interface configuration
-  hosts: 5672
+  hosts: '5672'
   connection: local
   gather_facts: no
 

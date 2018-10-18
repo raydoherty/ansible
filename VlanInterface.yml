@@ -6,7 +6,7 @@
   gather_facts: no
 
   tasks:
-      - name: Create VLAN interface
+      - name: Vlan Interface configuration
         nxos_interface:
             interface_type: svi
             interface: vlan 10

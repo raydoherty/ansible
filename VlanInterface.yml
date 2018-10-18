@@ -6,10 +6,10 @@
   gather_facts: no
 
   tasks:
-      - name: Vlan Interface configuration
-        nxos_interface:
-            interface_type: svi
-            interface: vlan 10
-            admin_state: up
-            mode: layer3
-            state: present
+    - name: Vlan Interface configuration
+      nxos_interface:
+          interface_type: svi
+          interface: vlan 10
+          admin_state: up
+          mode: layer3
+          state: present

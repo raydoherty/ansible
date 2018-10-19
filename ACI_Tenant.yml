@@ -6,6 +6,11 @@
 
   tasks:
     - name: Create (or delete) tenant
-      hostname: '{{ inventory_hostname }}'
-      username: "{{ lookup('env', 'ANSIBLE_NET_USERNAME') }}"
-      password: "{{ lookup('env', 'ANSIBLE_NET_PASSWORD') }}"
+      aci_tenant:
+        hostname: '{{ inventory_hostname }}'
+        username: "{{ lookup('env', 'ANSIBLE_NET_USERNAME') }}"
+        password: "{{ lookup('env', 'ANSIBLE_NET_PASSWORD') }}"
+        tenant: Ansible_Tenant
+        description: 'created with ansible'
+        state: present
+      

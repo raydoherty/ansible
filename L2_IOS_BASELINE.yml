@@ -19,6 +19,4 @@
                 - spanning-tree etherchannel guard misconfig 
                 - spanning-tree extend system-id 
                 - spanning-tree mode rapid-pvst 
-                - ip classless 
-                - username cisadmin priv 15 secret c1s001 
-                - username cisop priv 15 secret c1s#237VT! 
+                - ip classless

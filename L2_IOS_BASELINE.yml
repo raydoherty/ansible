@@ -1,0 +1,24 @@
+---
+  - name: clock configuration
+    hosts: '5548'
+    connection: local
+    gather_facts: no
+
+    tasks:
+       - name: IOS | Show clock
+         ios_config:
+             lines:
+                - hostname STAC5548_ANSBL1 
+                - ip subnet-zero 
+                - no ip source-route 
+                - no ip domain-lookup 
+                - ip domain-name uscis.dhs.gov 
+                - no vstack 
+                - spanning-tree portfast bpduguard default 
+                - spanning-tree portfast bpdufilter default 
+                - spanning-tree etherchannel guard misconfig 
+                - spanning-tree extend system-id 
+                - spanning-tree mode rapid-pvst 
+                - ip classless 
+                - username cisadmin priv 15 secret c1s001 
+                - username cisop priv 15 secret c1s#237VT! 

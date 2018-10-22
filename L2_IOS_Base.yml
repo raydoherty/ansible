@@ -1,0 +1,21 @@
+---
+  - name: L2_IOS_Base
+    hosts: 10.193.195.14
+    connection: local
+    gather_facts: no
+
+    tasks:
+       - name: IOS | Base
+         ios_config:
+             lines:
+                - hostname STAC5548_ANSBL1 
+                - ip subnet-zero 
+                - no ip source-route 
+                - no ip domain-lookup 
+                - ip domain-name uscis.dhs.gov  
+                - spanning-tree portfast bpduguard default 
+                - spanning-tree portfast bpdufilter default 
+                - spanning-tree etherchannel guard misconfig 
+                - spanning-tree extend system-id 
+                - spanning-tree mode rapid-pvst 
+                - ip classless 

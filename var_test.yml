@@ -1,0 +1,14 @@
+---
+  - name: L2_IOS_Var
+    hosts: 10.193.195.14
+    connection: local
+    gather_facts: no
+
+    tasks:
+       - name: IOS | Base
+         ios_config:
+            lines:
+             - "ip address {{ item.int_addr }} 255.255.255.255"
+            parents: "interface {{ item.int_name }}"
+         with_items: "{{ interfaces }}"
+          

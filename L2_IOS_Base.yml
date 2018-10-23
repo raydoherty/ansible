@@ -8,7 +8,7 @@
        - name: IOS | Base
          ios_config:
              lines:
-                - hostname STAC5548_ANSBL1 
+                - "hostname {{ Hostvar }} 
                 - ip subnet-zero 
                 - no ip source-route 
                 - no ip domain-lookup 
@@ -19,3 +19,10 @@
                 - spanning-tree extend system-id 
                 - spanning-tree mode rapid-pvst 
                 - ip classless 
+                
+       - name: snmp config
+         ios_config:
+             lines:
+                - "snmp-server contact {{ item.contact }}"
+                - "snmp-server location {{ item.location }}"
+         with_items:  "{{ SNMPvar }}"

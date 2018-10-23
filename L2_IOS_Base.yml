@@ -20,8 +20,8 @@
                 - spanning-tree mode rapid-pvst 
                 - ip classless 
                 
-       - name: snmp config
-         ios_config:
+        - name: snmp config
+          ios_config:
              lines:
                 - "snmp-server contact {{ item.contact }}"
                 - "snmp-server location {{ item.location }}"

@@ -1,0 +1,46 @@
+---
+
+- name: Netflow
+  hosts: '5672'
+  connection: network_cli
+  gather_facts: no
+
+  tasks:
+    - name: NXOS | show ip interfaces
+      nxos_command:
+          commands: 
+             - show ip interface brief | include Vlan
+      register: ipint
+    
+    - set_fact:
+        intf: |
+          {{ipint.stdout_lines[0] |
+            map('regex_findall','^([A-Za-z]+[0-9./]+)') |
+            map('join') | list }}
+            
+      
+    - name: NXOS | Remove flow monitor from Interface
+      nxos_config:
+          lines: 
+             - no ip flow monitor UDP-Monitor input sampler UDP
+          parents: "interface {{ item }}"
+      with_items: "{{ intf }}"
+
+    - name: NXOS | Change Exporter IP
+      nxos_config:
+          lines: 
+             - destination x.x.x.x
+          parents: flow exporter UDP-Exporter
+
+    - name: NXOS | Add flow monitor to Interface
+      nxos_config:
+          lines: 
+             - ip flow monitor UDP-Monitor input sampler UDP
+          parents: "interface {{ item }}"
+      with_items: "{{intf}}"
+          
+    - name: NXOS | Save to Startup
+      nxos_config:
+          lines: 
+             - wr
+    - debug: var=intf

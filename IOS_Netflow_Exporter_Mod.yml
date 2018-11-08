@@ -17,6 +17,7 @@
           {{ipint.stdout_lines[0] |
             map('regex_findall','^([A-Za-z]+[0-9./]+)') |
             map('join') | list }}    
+            
      - name: NXOS | Remove flow monitor from Interface
        ios_config:
           lines: 

@@ -18,22 +18,24 @@
             map('regex_findall','^([A-Za-z]+[0-9./]+)') |
             map('join') | list }}    
      - name: NXOS | Remove flow monitor from Interface
-      nxos_config:
+       ios_config:
           lines: 
-             - no ip flow monitor UDP-Monitor input sampler UDP
+             - no ip flow monitor UDP-Monitor input 
+             - no ip flow monitor UDP-Monitor out
           parents: "interface {{ item }}"
       with_items: "{{ intf }}"
 
     - name: NXOS | Change Exporter IP
       ios_config:
           lines: 
-             - destination x.x.x.x
+             - destination 2.2.2.2
           parents: flow exporter UDP-Exporter
 
     - name: NXOS | Add flow monitor to Interface
       ios_config:
           lines: 
-             - ip flow monitor UDP-Monitor input sampler UDP
+             - ip flow monitor UDP-Monitor input
+             - ip flow monitor UDP-Monitor out
           parents: "interface {{ item }}"
       with_items: "{{intf}}"
           

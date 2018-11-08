@@ -1,0 +1,22 @@
+---
+
+- name: test
+  hosts: all
+  connection: network_cli
+  gather_facts: no
+
+  tasks:
+    - name: ios | show ip interfaces
+      ios_command:
+          commands: 
+             - sho ip int brief | inc [0-9]+[ ]+YES
+      register: ipint
+    
+    - set_fact:
+        intf: |
+          {{ipint.stdout_lines[0] |
+            map('regex_findall','^([A-Za-z]+[0-9./]+)') |
+            map('join') | list }}               
+
+    - debug: var=intf
+© 2018 GitHub, Inc.

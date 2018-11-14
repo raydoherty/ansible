@@ -13,4 +13,4 @@
  
     - name: generate fact from interface output
       set_facts:
-        nxos_ifaces: "{{ ipint.stdout[0] |parse_cli('./show_interface_parser.yml')
+        nxos_ifaces: "{{ ipint.stdout[0] |parse_cli('./show_interface_parser.yml') }}"

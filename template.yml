@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: get show interface
+      nxos_command:
+        commands:
+            - show interface
+      register: iface_output
+    - name: generate fact from interface output
+      set_facts:
+        nxos_ifaces: "{{ iface_output.stdout[0] |parse_cli('./parsers/nxos/nxos_show_interface_parser.yml')

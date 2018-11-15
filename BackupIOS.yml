@@ -1,0 +1,27 @@
+---
+- name: Backup test
+  hosts: all
+  connection: network_cli
+  gather_facts: no
+
+  tasks:
+    - name: Save Configs
+      ios_command:
+         commands: show run
+      register: running
+
+    - name: ensure backup dirctory exists
+      file:
+        path: "backups/{{ inventory_hostname }}"
+        state: directory
+
+    - name: get timestamp
+      command: date +%Y%m%d%H%M
+      register: timestamp
+
+    - debug:
+        msg: "{{ running.stdout[0] }}"
+
+    - copy:
+        content: "{{ running.stdout[0] }}"
+        dest:  "backups/{{ inventory_hostname }}/running-config_{{ timestamp.stdout }}"

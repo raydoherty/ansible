@@ -1,0 +1,46 @@
+---
+  - name: L2_IOS_Diff
+    hosts: 10.193.195.14
+    connection: network_cli
+    gather_facts: no
+
+    tasks:
+       - name: ENSURE THAT THE DIR TO STORE RUNNING CONFIGS EXITS
+         file:
+            path: CFGS/files/running_configs
+            state: directory
+            mode: 0777
+         delegate_to: localhost
+         run_once: yes
+
+       - name: Show Run
+         ios_command:
+             commands:
+                - show run
+         register: show_run
+       
+       - name: Copy Run to File
+         copy:
+            content: "{{ show_run.stdout[0] }}"
+            dest: "CFGS/{{ inventory_hostname }}.Rtxt"
+            
+       - name: Copy Start
+         ios_command:
+             commands:
+                - show start
+         register: show_start
+       
+       - name: Copy Start to File
+         copy:
+            content: "{{ show_start.stdout[0] }}"
+            dest: "CFGS/{{ inventory_hostname }}.Stxt" 
+       - command: >-
+            diff "CFGS/{{ inventory_hostname }}.Rtxt"  "CFGS/"{{ inventory_hostname }}".Stxt" 
+         register: diff_output
+         delegate_to: localhost
+         failed_when: diff_output.rc > 1
+         changed_when: diff_output.rc == 1
+         run_once: true
+         
+       - debug:
+            var: diff_output.stdout

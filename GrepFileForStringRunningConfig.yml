@@ -1,0 +1,42 @@
+- hosts: localhost
+  tasks:
+  - name: Ansible grep running config
+    shell: "egrep -lir 'vpc domain 990' *.Rtxt"
+    args:
+      chdir: "CFGS/"
+    delegate_to: localhost  
+    register: grep_output
+    ignore_errors: true
+
+  - set_fact:
+        hostfile: "{{grep_output.stdout_lines}}"
+        
+  - name:  delete file in a remote server
+    file:
+      path: CFGS/newinvent
+      state: absent
+     
+  - name:  create file in a remote server
+    file:
+      path: CFGS/newinvent
+      state: touch     
+     
+  - name: add lines
+    lineinfile: 
+      dest: CFGS/newinvent
+      line: '{{ item }}'
+    with_items: "{{hostfile}}"
+
+  - name: remove extension
+    replace:
+      path: CFGS/newinvent
+      regexp: '.Rtxt$'
+      replace: ''
+      backup: yes    
+      
+  - name: Read file
+    shell: "cat CFGS/newinvent"
+    register: newinventory
+     
+  - debug:
+      var: newinventory

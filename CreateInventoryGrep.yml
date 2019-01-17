@@ -44,7 +44,7 @@
 
   - debug:
       var: invent
-	  
+
   - name: Ansible grep running config
     shell: "egrep -lir 'destination x.x.x.x' *.Rtxt | xargs egrep -lir 'Nexus'"
     args:
@@ -60,7 +60,7 @@
     file:
       path: CFGS/westinventNexus
       state: absent
-	  
+
   - name:  create file in a remote server
     file:
       path: CFGS/westinventNexus

@@ -1,0 +1,90 @@
+- hosts: localhost
+
+  tasks:
+  - name: Ansible grep running config
+    shell: "egrep -lir 'destination x.x.x.x' *.Rtxt | xargs egrep -lir 'IOS* Software'"
+    args:
+      chdir: "CFGS/files/running_configs/"
+    delegate_to: localhost
+    register: grep_output
+    ignore_errors: true
+
+  - set_fact:
+        hostfile: "{{grep_output.stdout_lines}}"
+
+  - name:  delete file in a remote server
+    file:
+      path: CFGS/westinventIOS
+      state: absent
+
+  - name:  create file in a remote server
+    file:
+      path: CFGS/westinventIOS
+      state: touch
+
+  - name: add lines
+    lineinfile:
+      dest: CFGS/westinventIOS
+      line: '{{ item }}'
+    with_items: "{{hostfile}}"
+
+  - name: remove extension
+    replace:
+      path: CFGS/westinventIOS
+      regexp: '.Rtxt$'
+      replace: ''
+      backup: yes
+
+  - name: Read file
+    shell: "cat CFGS/westinventIOS"
+    register: westinventoryIOS
+
+  - set_fact:
+        invent: "{{westinventoryIOS.stdout_lines}}"
+
+  - debug:
+      var: invent
+	  
+  - name: Ansible grep running config
+    shell: "egrep -lir 'destination x.x.x.x' *.Rtxt | xargs egrep -lir 'Nexus'"
+    args:
+      chdir: "CFGS/files/running_configs/"
+    delegate_to: localhost
+    register: grep_output_nexus
+    ignore_errors: true
+
+  - set_fact:
+        hostfileNexus: "{{grep_output_nexus.stdout_lines}}"
+
+  - name:  delete file in a remote server
+    file:
+      path: CFGS/westinventNexus
+      state: absent
+	  
+  - name:  create file in a remote server
+    file:
+      path: CFGS/westinventNexus
+      state: touch
+
+  - name: add lines
+    lineinfile:
+      dest: CFGS/westinventNexus
+      line: '{{ item }}'
+    with_items: "{{hostfileNexus}}"
+
+  - name: remove extension
+    replace:
+      path: CFGS/westinventNexus
+      regexp: '.Rtxt$'
+      replace: ''
+      backup: yes
+
+  - name: Read file
+    shell: "cat CFGS/westinventNexus"
+    register: westinventoryNexus
+
+  - set_fact:
+        inventNexus: "{{westinventoryNexus.stdout_lines}}"
+
+  - debug:
+      var: inventNexus

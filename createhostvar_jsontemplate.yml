@@ -1,0 +1,53 @@
+- name: GENERATE INTERFACE REPORT
+  hosts: 10.193.195.21
+  gather_facts: no
+  connection: network_cli
+
+  roles:
+    - ansible-network.network-engine
+
+  tasks:
+    - name: CAPTURE SHOW INTERFACES
+      ios_command:
+        commands:
+          - show run | section interface
+      register: output
+
+    - name: PARSE THE RAW OUTPUT
+      command_parser:
+        file: "parsers/sho_run_interfaces.yaml"
+        content: "{{ output.stdout[0] }}"
+      ignore_errors: yes
+
+    - name: DISPLAY THE PARSED DATA
+      debug:
+        var: interface_facts
+
+#    - name: Display section
+#      debug:
+#        var: section
+
+#    - name: display interfaces
+#      debug:
+#        var: interfaces
+#
+    - name: GENERATE REPORT FRAGMENTS
+      template:
+        src: int_fact.j2
+        dest: host_vars/{{inventory_hostname}}.yaml
+      ignore_errors: yes
+
+    - name: Ansible awk To increment variable
+      shell: awk '{for(x=1;x<=NF;x++)if($x~/interface_var/){sub(/interface_var/,"interface_var"++i)}}1' host_vars/"{{ inventory_hostname }}".yaml > tmp && mv tmp host_vars/"{{ inventory_hostname }}".yaml
+
+    - name: CAPTURE SHOW INTERFACES
+      ios_config:
+        lines:
+          - description test123
+        parents: "interface {{ item.Name }}"
+      with_items: "{{ interface_var4 }}"
+      register: output
+      tags: config
+
+    - debug:
+        var: output

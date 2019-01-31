@@ -1,0 +1,10 @@
+{% for intf in interface_facts %}
+{% for intf_key,intf_value in intf.items() %}
+interface_var:
+{% for k,v in intf_value.items() %}
+  - flow: {{v.flow}}
+    Name: {{v.name}}
+
+{% endfor %}
+{% endfor %}
+{% endfor %}

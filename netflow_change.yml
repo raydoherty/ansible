@@ -1,0 +1,93 @@
+- name: IOS_Netflow_Exporter_Mod
+  hosts: hosts
+  connection: network_cli
+  gather_facts: no
+
+  tasks:
+    - name: ios | show ip interfaces
+      ios_command:
+          commands:
+             - sho ip int brief | inc [0-9]+[ ]+YES
+      register: ipint
+      tags:
+        - runfail
+
+    - set_fact:
+        intf: |
+          {{ipint.stdout_lines[0] |
+            map('regex_findall','^([A-Za-z]+[0-9./]+)') |
+            map('join') | list }}
+      tags:
+        - runfail
+
+
+    - name: IOS | Remove Stealthwatch flow monitor from Interface
+      ios_config:
+          lines:
+             - no ip flow monitor MonitorOfChoice input
+             - no ip flow monitor MonitorOfChoice out
+          parents: "interface {{ item }}"
+      with_items: "{{ intf }}"
+      ignore_errors: yes
+
+    - name: IOS | Remove IP flow from Interface
+      ios_config:
+          lines:
+             - no ip flow ingress
+             - no ip flow egress
+          parents: "interface {{ item }}"
+      with_items: "{{ intf }}"
+      ignore_errors: yes
+
+    - name: IOS | Change Exporter IP
+      ios_config:
+          lines:
+             - destination x.x.x.x
+          parents: flow exporter MonitorOfChoice
+
+    - name: IOS | Add flow monitor to Interface
+      ios_config:
+          lines:
+             - ip flow monitor MonitorOfChoice input
+             - ip flow monitor MonitorOfChoice out
+          parents: "interface {{ item }}"
+      with_items: "{{intf}}"
+      ignore_errors: yes
+      tags:
+        - runfail
+
+    - name: ios | show ip interfaces
+      ios_command:
+          commands:
+             - sho ip int brief | inc Loopback
+      register: ipintlbk
+      tags:
+        - loopbk
+
+    - set_fact:
+        intfloopbk: |
+          {{ipintlbk.stdout_lines[0] |
+            map('regex_findall','^([Loopback]+[0-9./]+)') |
+            map('join') | list }}
+      tags:
+        - loopbk
+
+    - name: IOS | Remove flow monitor from Interface
+      ios_config:
+          lines:
+             - no ip flow monitor MonitorOfChoice input
+             - no ip flow monitor MonitorOfChoice out
+          parents: "interface {{ item }}"
+      with_items: "{{ intfloopbk }}"
+      tags:
+        - loopbk
+
+    - debug: var=intfloopbk
+
+    - name: IOS | Save to Startup
+      ios_command:
+          commands:
+             - wr  mem
+      tags:
+        - writemem
+    - debug: var=intf

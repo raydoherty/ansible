@@ -1,0 +1,49 @@
+---
+- name: TASK TO Enable Smart Licesning
+  hosts: all
+  connection: network_cli
+  gather_facts: no
+  remote_user: "{{adminusername}}"
+  vars:
+    ansible_command_timeout: 150
+    ansible_ssh_pass: "{{adminpassword}}"
+    ansible_become_password: "{{adminpassword}}"
+
+  tasks:
+    - name: Gather Hardware Facts
+      ios_facts:
+        gather_subset:
+          - all
+      register: hardware_fact
+      tags: facts
+
+    - name: Enable Smart License Call Home All Platforms
+      ios_config:
+        src: "templatesnippet/call_home.txt"
+
+    - name: Additional IOS command for 3650
+      ios_command:
+        commands:
+          - license smart register idtoken "{{smart_token_3650}}"
+          - license smart conversion start
+      when: '"3650" in ansible_net_model'
+
+    - name: Additional IOS command for 3850
+      ios_command:
+        commands:
+          - license smart register idtoken "{{smart_token_3850}}"
+          - license smart conversion start
+      when: '"3850" in ansible_net_model'
+
+    - name: Additional IOS command for 9300
+      ios_command:
+        commands:
+          - license smart register idtoken "{{smart_token_9300}}"
+      when: '"9300" in ansible_net_model'
+      
+    - name: Additional IOS command for ISR 4000
+      ios_command:
+        commands:
+          - license smart register idtoken "{{smart_token_4000}}"
+          - license smart conversion start
+      when: '"ISR4" in ansible_net_model'

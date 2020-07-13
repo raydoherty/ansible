@@ -1,0 +1,35 @@
+{% if "ISR4" in ansible_net_model %}
+ip name-server {dns ip}
+ip domain lookup
+ip domain lookup source-interface gig 0/0/0
+license smart transport callhome
+ ip http client source-interface gig 0/0/0
+service call-home
+{% else %}
+ip name-server {dns IP}
+ip domain lookup
+ip domain lookup source-interface {wan int}
+license smart transport callhome
+ ip http client source-interface {wan int}
+service call-home
+{% endif %}
+!
+call-home
+ contact-email-addr sch-smart-licensing@cisco.com
+ data-privacy hostname
+ http-proxy {ifneeded} port 80
+ profile CiscoTAC-1
+  no active
+  destination transport-method http
+  no destination transport-method email
+ profile New-Profile
+  active
+  anonymous-reporting-only
+  no reporting smart-call-home-data
+  reporting smart-licensing-data
+  destination transport-method http
+  no destination transport-method email
+  destination address http https://tools.cisco.com/its/service/oddce/services/DDCEService
+ !
+ end
+ !

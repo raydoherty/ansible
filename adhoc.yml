@@ -1,0 +1,31 @@
+---
+- name: TASK TO RUN THE AUDIT LINE
+  hosts: all
+  connection: network_cli
+  gather_facts: false
+  
+  tasks:
+    - name: NXOS BLOCK
+      block:
+        - name: NXOS CONFIG
+          nxos_config:
+            commands: 
+              - "{{item}}"
+          loop: "{{commandtoexecute.split('\n')}}"
+          loop_control:
+            loop_var: item
+        - name: NXOS SAVE CONFIG
+          nxos_config:
+            save_when: modified
+      when: ansible_network_os == 'nxos'
+    - name: IOS BLOCK
+      block:
+        - name: IOS CONFIG AUDIT
+          ios_config:
+            commands: 
+              - "{{item}}"
+          loop: "{{commandtoexecute.split('\n')}}"
+        - name: IOS SAVE CONFIG
+          ios_config:
+            save_when: modified
+      when: ansible_network_os == 'ios' 

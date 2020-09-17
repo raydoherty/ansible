@@ -1,6 +1,6 @@
 ---
   - name: clock configuration
-    hosts: switches
+    hosts: all
     connection: local
     gather_facts: no
     remote_user: "{{adminusername}}"

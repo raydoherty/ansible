@@ -1,6 +1,6 @@
 ---
   - name: clock configuration
-    hosts: '5548'
+    hosts: switches
     connection: local
     gather_facts: no
 

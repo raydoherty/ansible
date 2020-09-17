@@ -3,6 +3,11 @@
     hosts: switches
     connection: local
     gather_facts: no
+    remote_user: "{{adminusername}}"
+    vars:
+      ansible_command_timeout: 150
+      ansible_ssh_pass: "{{adminpassword}}"
+      ansible_become_password: "{{adminpassword}}"
 
     tasks:
        - name: IOS | Show clock

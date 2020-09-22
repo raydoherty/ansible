@@ -10,6 +10,14 @@
     ansible_become_password: "{{adminpassword}}"
   
   tasks:
+
+    - name: Gather Hardware Facts
+      ios_facts:
+        gather_subset:
+          - all
+      register: hardware_fact
+      tags: facts
+      
     - name: NXOS BLOCK
       block:
         - name: NXOS COMMAND

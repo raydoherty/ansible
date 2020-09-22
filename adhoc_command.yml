@@ -27,6 +27,7 @@
           loop: "{{commandtoexecute.split('\n')}}"
           loop_control:
             loop_var: item
+      when: ansible_network_os == 'nxos'
             
     - name: IOS BLOCK
       block:
@@ -35,3 +36,5 @@
             commands: 
               - "{{item}}"
           loop: "{{commandtoexecute.split('\n')}}"
+      when: ansible_network_os == 'ios'
+      

@@ -1,0 +1,29 @@
+---
+- name: TASK TO RUN THE AUDIT LINE
+  hosts: all
+  connection: network_cli
+  gather_facts: false
+  remote_user: "{{adminusername}}"
+  vars:
+    ansible_command_timeout: 150
+    ansible_ssh_pass: "{{adminpassword}}"
+    ansible_become_password: "{{adminpassword}}"
+  
+  tasks:
+    - name: NXOS BLOCK
+      block:
+        - name: NXOS COMMAND
+          nxos_command:
+            commands: 
+              - "{{item}}"
+          loop: "{{commandtoexecute.split('\n')}}"
+          loop_control:
+            loop_var: item
+            
+    - name: IOS BLOCK
+      block:
+        - name: IOS CONFIG AUDIT
+          ios_command:
+            commands: 
+              - "{{item}}"
+          loop: "{{commandtoexecute.split('\n')}}"

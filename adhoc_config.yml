@@ -14,7 +14,7 @@
       block:
         - name: NXOS CONFIG
           nxos_config:
-            commands: 
+            lines: 
               - "{{item}}"
           loop: "{{commandtoexecute.split('\n')}}"
           loop_control:
@@ -27,7 +27,7 @@
       block:
         - name: IOS CONFIG AUDIT
           ios_config:
-            commands: 
+            lines: 
               - "{{item}}"
           loop: "{{commandtoexecute.split('\n')}}"
         - name: IOS SAVE CONFIG
